@@ -1,0 +1,16 @@
+{
+  "name": "spotify-dbus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dbus": "^1.0.6",
+    "node-gyp": "^6.1.0",
+    "underscore": "^1.9.2"
+  }
+}
