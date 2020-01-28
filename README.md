@@ -40,5 +40,6 @@ node main.js
 - [dbus npm package](https://www.npmjs.com/package/dbus)
 - [dbus npm package repo](https://github.com/Shouqun/node-dbus)
 - [Debugging DBus](https://wiki.ubuntu.com/DebuggingDBus)
-- [GUI DBus Debugger](https://wiki.gnome.org/Apps/DFeet)
+- [D-feet: GUI DBus Debugger](https://wiki.gnome.org/Apps/DFeet)
 - [Spotify using CLI](https://community.spotify.com/t5/Desktop-Linux/Basic-controls-via-command-line/td-p/4295625)
+- [DBus specifications](https://specifications.freedesktop.org/)
