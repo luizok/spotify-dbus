@@ -9,9 +9,18 @@ let spotify = {
     objectPath: '/org/mpris/MediaPlayer2',
     interfaces: [
         'org.mpris.MediaPlayer2.Player',
-        'org.freedesktop.DBus.Properties'
+        'org.freedesktop.DBus.Properties',
+        'org.freedesktop.Notifications'
     ]
 };
+let iconGetter = {
+    service: ':1.32',
+    objectPath: '/com/canonical/indicator/sound',
+    interfaces: [
+        'org.gtk.Actions'
+    ]
+};
+
 let player = {
     nextTrack: null,
     prevTrack: null,
@@ -23,13 +32,36 @@ let player = {
 let ifaceCallbackWrapper = (iface, method, callback) => {
 
     iface[method]((err) => {
-        callback(err, player.currentTrack);
+        // TODO: Fix sync/async problems. Sometimes response callback is
+        // is called before some changes be done, causing incosistence
+        // in the response. Temporally solved using setTimeout() :v
+        // The call order must be:
+        //  - iface.on('propertyChanged')
+        //  - iface.on('Changed')
+        //  - this callback
+        setTimeout(() => { callback(err, player.currentTrack) }, 400);
     });
 };
 
 // TODO: Find elegant way to solve this callback hell
 // TODO: player.currentTrack actually shows to before-last one
 let buildManager = (callback) => {
+
+    bus.getInterface(iconGetter.service, iconGetter.objectPath, iconGetter.interfaces[0], (err, iface) => {
+
+        if (err)
+            callback(err, null);
+        else {
+            iface.on('Changed', (_, __, obj) => {
+                try {
+                    player.currentTrack.albumArt = obj['spotify.desktop']['art-url'];
+                } catch (err) {
+                    //TODO: Check when obj['spotify.desktop'] is undefined
+                    console.log('Error');
+                };
+            });
+        }
+    });
 
     bus.getInterface(spotify.service, spotify.objectPath, spotify.interfaces[0], (err, iface) => {
 
