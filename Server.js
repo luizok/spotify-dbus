@@ -14,12 +14,8 @@ let player;
 
 app.get('/', (req, res) => {
 
-    // let extra = res.playerData ? ``
-    // `
-    //     <p>CURRENT TRACK: ${JSON.stringify(player.currentTrack)}</p>
-    //     <img src='${player.currentTrack.albumArt}'></img>
-    // `
-    // ``: '';
+    // let extra = player.currentTrack && player.currentTrack.albumArt ?
+    // ```<img src='${player.currentTrack.albumArt}'></img>``` : '<p>nada</p>';
 
     res.send(
         `
@@ -32,6 +28,7 @@ app.get('/', (req, res) => {
                 <li><a href='/stop'>stop</a></li>
             </ul>
             <p>CURRENT TRACK: ${JSON.stringify(player.currentTrack)}</p>
+            <img src='${player.currentTrack ? player.currentTrack.albumArt : ""}'></img>
         </html>
         `
     );
@@ -40,7 +37,6 @@ app.get('/', (req, res) => {
 app.get('/prev', (req, res) => {
     player.prevTrack((err, t) => {
         if (!err) {
-            res.playerData = player.currentTrack;
             res.redirect('/');
         }
     });
@@ -49,7 +45,6 @@ app.get('/prev', (req, res) => {
 app.get('/next', (req, res) => {
     player.nextTrack((err, t) => {
         if (!err) {
-            res.playerData = player.currentTrack;
             res.redirect('/');
         }
     });
@@ -58,7 +53,6 @@ app.get('/next', (req, res) => {
 app.get('/play_pause', (req, res) => {
     player.playPause((err, t) => {
         if (!err) {
-            res.playerData = player.currentTrack;
             res.redirect('/');
         }
     });
@@ -67,7 +61,6 @@ app.get('/play_pause', (req, res) => {
 app.get('/stop', (req, res) => {
     player.stopTrack((err, t) => {
         if (!err) {
-            res.playerData = player.currentTrack;
             res.redirect('/');
         }
     });
