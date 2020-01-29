@@ -52,7 +52,7 @@ let buildManager = (callback) => {
         if (err)
             callback(err, null);
         else {
-            iface.on('Changed', (_, __, obj) => {
+            iface.on('Changed', (unused1, unused2, obj) => {
                 try {
                     player.currentTrack.albumArt = obj['spotify.desktop']['art-url'];
                 } catch (err) {
@@ -80,7 +80,7 @@ let buildManager = (callback) => {
                     callback(err, null);
                 } else {
 
-                    _iface.on('PropertiesChanged', (str, obj, arr) => {
+                    _iface.on('PropertiesChanged', (unused1, obj, unused2) => {
 
                         let newState = {
                             artist: obj.Metadata['xesam:artist'][0],
