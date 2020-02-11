@@ -9,8 +9,7 @@ let spotify = {
     objectPath: '/org/mpris/MediaPlayer2',
     interfaces: [
         'org.mpris.MediaPlayer2.Player',
-        'org.freedesktop.DBus.Properties',
-        'org.freedesktop.Notifications'
+        'org.freedesktop.DBus.Properties'
     ]
 };
 
