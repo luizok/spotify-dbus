@@ -13,13 +13,6 @@ let spotify = {
         'org.freedesktop.Notifications'
     ]
 };
-let iconGetter = {
-    service: ':1.32',
-    objectPath: '/com/canonical/indicator/sound',
-    interfaces: [
-        'org.gtk.Actions'
-    ]
-};
 
 let player = {
     nextTrack: null,
@@ -47,22 +40,6 @@ let ifaceCallbackWrapper = (iface, method, callback) => {
 // TODO: player.currentTrack actually shows to before-last one
 let buildManager = (callback) => {
 
-    bus.getInterface(iconGetter.service, iconGetter.objectPath, iconGetter.interfaces[0], (err, iface) => {
-
-        if (err)
-            callback(err, null);
-        else {
-            iface.on('Changed', (unused1, unused2, obj) => {
-                try {
-                    player.currentTrack.albumArt = obj['spotify.desktop']['art-url'];
-                } catch (err) {
-                    //TODO: Check when obj['spotify.desktop'] is undefined
-                    console.log('Error');
-                };
-            });
-        }
-    });
-
     bus.getInterface(spotify.service, spotify.objectPath, spotify.interfaces[0], (err, iface) => {
 
         if (err)
@@ -86,7 +63,8 @@ let buildManager = (callback) => {
                             artist: obj.Metadata['xesam:artist'][0],
                             music: obj.Metadata['xesam:title'],
                             album: obj.Metadata['xesam:album'],
-                            isPlaying: obj.PlaybackStatus === 'Playing'
+                            albumArt: obj.Metadata['mpris:artUrl'],
+                            isPlaying: obj.PlaybackStatus === 'Playing',
                         };
 
                         if (!_.isEqual(player.currentTrack, newState))
